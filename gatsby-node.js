@@ -2,21 +2,6 @@ const incstr = require('incstr')
 
 const localIds = {}
 
-function getCssRules (rules) {
-  const expectedTests = [
-    '/\\.module\\.css$/',
-    '/\\.css$/',
-    '/\\.module\\.s(a|c)ss$/',
-    '/\\.s(a|c)ss$/'
-  ]
-
-  return rules.filter(({ oneOf }) =>
-    oneOf &&
-    Array.isArray(oneOf) &&
-    oneOf.every(({ test }) => expectedTests.includes(String(test)))
-  )
-}
-
 function localIdent (resources, separator) {
   let localIdentName = ''
 
@@ -48,7 +33,13 @@ exports.onCreateWebpackConfig = (
   if (!develop && stage.startsWith(`develop`)) return
 
   const config = getConfig()
-  const rules = getCssRules(config.module.rules)
+  const rules = config.module.rules.filter(({ oneOf }) =>
+    oneOf &&
+    Array.isArray(oneOf) &&
+    oneOf.every(({ test }) =>
+      '.css'.search(test) || '.sass'.search(test) || '.less'.search(test)
+    )
+  )
 
   for (let { oneOf } of rules) {
     for (let { use } of oneOf) {
