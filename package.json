@@ -20,5 +20,8 @@
   },
   "peerDependencies": {
     "gatsby": "2.x"
+  },
+  "scripts": {
+    "postversion": "git push && git push --tags"
   }
 }

@@ -53,6 +53,7 @@ module.exports = {
       resolve: `gatsby-plugin-minify-classnames`,
       options: {
         develop: true, // Enable on `gatsby develop`
+        separator: '_', // Default separator is '_'
       },
     },
   ],
