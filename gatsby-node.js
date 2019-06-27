@@ -17,7 +17,7 @@ function getCssRules (rules) {
   )
 }
 
-function localIdent (resources) {
+function localIdent (resources, separator) {
   let localIdentName = ''
 
   for (let key in resources) {
@@ -35,15 +35,15 @@ function localIdent (resources) {
       localIds[key].set(resources[key], localId)
     }
 
-    localIdentName += `-${localId}`
+    localIdentName += `${separator}${localId}`
   }
 
-  return localIdentName.slice(1)
+  return localIdentName.slice(separator.length)
 }
 
 exports.onCreateWebpackConfig = (
   { actions, stage, getConfig },
-  { develop = false }
+  { develop = false, separator = '_' }
 ) => {
   if (!develop && stage.startsWith(`develop`)) return
 
@@ -57,7 +57,7 @@ exports.onCreateWebpackConfig = (
         if (!options || !options.localIdentName) continue
         options.getLocalIdent = (context, _, localName) => {
           const path = context.resourcePath
-          return localIdent({ path, localName })
+          return localIdent({ path, localName }, separator)
         }
       }
     }
