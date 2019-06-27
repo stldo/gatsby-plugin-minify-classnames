@@ -1,29 +1,33 @@
 const incstr = require('incstr')
 
-const localIds = {}
+const identMap = new Map()
 
 function localIdent (resources, separator) {
-  let localIdentName = ''
+  let ident = ''
 
   for (let key in resources) {
-    if (!localIds[key]) {
-      localIds[key] = new Map()
-      localIds[key].nextId = incstr.idGenerator({
-        alphabet: 'bcdfghjklmnpqrstvwxyz'
+    let mappedIdents = identMap.get(key)
+
+    if (mappedIdents === undefined) {
+      mappedIdents = new Map()
+      mappedIdents.nextId = incstr.idGenerator({
+        alphabet: 'bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ' +
+          (identMap.size ? '0123456789' : '')
       })
+      identMap.set(key, mappedIdents)
     }
 
-    let localId = localIds[key].get(resources[key])
+    let mappedIdent = mappedIdents.get(resources[key])
 
-    if (localId === undefined) {
-      localId = localIds[key].nextId()
-      localIds[key].set(resources[key], localId)
+    if (mappedIdent === undefined) {
+      mappedIdent = mappedIdents.nextId()
+      mappedIdents.set(resources[key], mappedIdent)
     }
 
-    localIdentName += `${separator}${localId}`
+    ident += `${separator}${mappedIdent}`
   }
 
-  return localIdentName.slice(separator.length)
+  return ident.slice(separator.length)
 }
 
 exports.onCreateWebpackConfig = (
