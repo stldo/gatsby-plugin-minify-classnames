@@ -11,6 +11,8 @@
     "css",
     "sass",
     "scss",
+    "postcss",
+    "less",
     "minify",
     "classnames",
     "class"
