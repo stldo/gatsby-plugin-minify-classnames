@@ -2,7 +2,7 @@ const incstr = require('incstr')
 
 const identMap = new Map()
 
-function localIdent (resources, separator) {
+function localIdent (resources) {
   let ident = ''
 
   for (let key in resources) {
@@ -24,15 +24,15 @@ function localIdent (resources, separator) {
       mappedIdents.set(resources[key], mappedIdent)
     }
 
-    ident += `${separator}${mappedIdent}`
+    ident += `_${mappedIdent}`
   }
 
-  return ident.slice(separator.length)
+  return ident.slice(1)
 }
 
 exports.onCreateWebpackConfig = (
   { actions, stage, getConfig },
-  { develop = false, separator = '_' }
+  { develop = false }
 ) => {
   if (!develop && stage.startsWith(`develop`)) return
 
@@ -52,7 +52,7 @@ exports.onCreateWebpackConfig = (
         if (!options || !options.localIdentName) continue
         options.getLocalIdent = (context, _, localName) => {
           const path = context.resourcePath
-          return localIdent({ path, localName }, separator)
+          return localIdent({ path, localName })
         }
       }
     }
