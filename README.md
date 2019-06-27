@@ -1,6 +1,6 @@
 # gatsby-plugin-minify-classnames
 
-Minify classnames when using CSS Modules.
+Minify classnames when using CSS Modules. It's compatible with official Gatsby PostCSS, Sass and Less plugins.
 
 ```css
 /* Without gatsby-plugin-minify-classnames */
@@ -40,20 +40,20 @@ $ npm install gatsby-plugin-minify-classnames
 
 ## Configure
 
-__Note:__ Add the plugin after PostCSS/Sass plugins.
+__Note:__ add this plugin after all PostCSS/Sass/Less plugins.
 
 ```javascript
 // gatsby-config.js
 
 module.exports = {
   plugins: [
+    `gatsby-plugin-less`,
     `gatsby-plugin-sass`,
     `gatsby-plugin-postcss`,
     {
       resolve: `gatsby-plugin-minify-classnames`,
       options: {
         develop: true, // Enable on `gatsby develop`
-        separator: '_', // Default separator is '_'
       },
     },
   ],
