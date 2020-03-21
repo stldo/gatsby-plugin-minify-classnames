@@ -1,40 +1,53 @@
 const incstr = require('incstr')
 
-const identMap = new Map()
+const FIRST_CHAR_IS_LETTER = /^[A-Za-z]/
+const HAS_A_LETTER = /[A-Za-z]/
+const IDENTIFIER_MAP = new Map()
 
-function localIdent(resources) {
-  let ident = ''
+function getMinifiedIdentifier(
+  fragments,
+  dictionary = 'bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ0123456789'
+) {
+  let minifiedIdentifier = ''
+  let index = 0
 
-  for (let key in resources) {
-    let mappedIdents = identMap.get(key)
+  for (let fragment in fragments) {
+    let fragmentMap = IDENTIFIER_MAP.get(fragment)
 
-    if (mappedIdents === undefined) {
-      mappedIdents = new Map()
-      mappedIdents.nextId = incstr.idGenerator({
-        alphabet: 'bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ' +
-          (identMap.size ? '0123456789' : '')
+    if (!fragmentMap) {
+      fragmentMap = new Map()
+      fragmentMap.getMinifiedIdentifierFragment = incstr.idGenerator({
+        alphabet: dictionary
       })
-      identMap.set(key, mappedIdents)
+      IDENTIFIER_MAP.set(fragment, fragmentMap)
     }
 
-    let mappedIdent = mappedIdents.get(resources[key])
+    const identifierFragment = fragments[fragment]
+    let minifiedIdentifierFragment = fragmentMap.get(identifierFragment)
 
-    if (mappedIdent === undefined) {
-      mappedIdent = mappedIdents.nextId()
-      mappedIdents.set(resources[key], mappedIdent)
+    if (!minifiedIdentifierFragment) {
+      do {
+        minifiedIdentifierFragment = fragmentMap.getMinifiedIdentifierFragment()
+      } while (!index && !FIRST_CHAR_IS_LETTER.test(minifiedIdentifierFragment))
+      fragmentMap.set(identifierFragment, minifiedIdentifierFragment)
     }
 
-    ident += `_${mappedIdent}`
+    minifiedIdentifier += `_${minifiedIdentifierFragment}`
+    index++
   }
 
-  return ident.slice(1)
+  return minifiedIdentifier.slice(1)
 }
 
 exports.onCreateWebpackConfig = (
-  { actions, stage, getConfig },
-  { enableOnDevelopment = false }
+  { actions, getConfig, stage },
+  { dictionary, enableOnDevelopment = false }
 ) => {
-  if (!enableOnDevelopment && stage.startsWith(`develop`)) return
+  if (!enableOnDevelopment && stage.startsWith(`develop`)) {
+    return
+  } else if (dictionary && !HAS_A_LETTER.test(dictionary)) {
+    throw new Error(`'dictionary' must have at least one letter`)
+  }
 
   const config = getConfig()
   const rules = config.module.rules.filter(({ oneOf }) =>
@@ -52,7 +65,7 @@ exports.onCreateWebpackConfig = (
         if (!options || !options.localIdentName) continue
         options.getLocalIdent = (context, _, localName) => {
           const path = context.resourcePath
-          return localIdent({ path, localName })
+          return getMinifiedIdentifier({ path, localName }, dictionary)
         }
       }
     }
