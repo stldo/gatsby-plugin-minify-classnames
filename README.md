@@ -53,7 +53,7 @@ module.exports = {
     {
       resolve: `gatsby-plugin-minify-classnames`,
       options: {
-        develop: true, // Enable on `gatsby develop`
+        enableOnDevelopment: true, // Enable on `gatsby develop`
       },
     },
   ],

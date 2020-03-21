@@ -2,7 +2,7 @@ const incstr = require('incstr')
 
 const identMap = new Map()
 
-function localIdent (resources) {
+function localIdent(resources) {
   let ident = ''
 
   for (let key in resources) {
@@ -32,9 +32,9 @@ function localIdent (resources) {
 
 exports.onCreateWebpackConfig = (
   { actions, stage, getConfig },
-  { develop = false }
+  { enableOnDevelopment = false }
 ) => {
-  if (!develop && stage.startsWith(`develop`)) return
+  if (!enableOnDevelopment && stage.startsWith(`develop`)) return
 
   const config = getConfig()
   const rules = config.module.rules.filter(({ oneOf }) =>
