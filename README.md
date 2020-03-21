@@ -1,6 +1,6 @@
 # gatsby-plugin-minify-classnames
 
-Minify classnames when using CSS Modules. It's compatible with official Gatsby PostCSS, Sass and Less plugins.
+Minify classnames created with CSS Modules. This plugin is compatible with official Gatsby PostCSS, Sass and Less plugins.
 
 ```css
 /* Without gatsby-plugin-minify-classnames */
@@ -53,12 +53,23 @@ module.exports = {
     {
       resolve: `gatsby-plugin-minify-classnames`,
       options: {
-        enableOnDevelopment: true, // Enable on `gatsby develop`
+        dictionary: 'bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ0123456789',
+        enableOnDevelopment: false,
       },
     },
   ],
 }
 ```
+
+## Options
+
+### dictionary
+
+Set a custom dictionary to create the minified classnames. The generated classnames will always start with letters, so the string must have at least one letter. The default value is `'bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ0123456789'`.
+
+### enableOnDevelopment
+
+Minify classnames during development. The default value is `false`.
 
 ## License
 
