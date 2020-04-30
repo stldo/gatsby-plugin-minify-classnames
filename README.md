@@ -1,6 +1,7 @@
 # gatsby-plugin-minify-classnames
 
-Minify classnames created with CSS Modules. This plugin is compatible with official Gatsby PostCSS, Sass and Less plugins.
+Minify classnames created with CSS Modules. This plugin is compatible with
+official Gatsby Less, Sass, Stylus and PostCSS plugins.
 
 ```css
 /* Without gatsby-plugin-minify-classnames */
@@ -40,7 +41,7 @@ $ npm install gatsby-plugin-minify-classnames
 
 ## Configure
 
-__Note:__ add this plugin after all PostCSS/Sass/Less plugins.
+__Note:__ add this plugin after all Less/Sass/Stylus/PostCSS plugins.
 
 ```javascript
 // gatsby-config.js
@@ -49,6 +50,7 @@ module.exports = {
   plugins: [
     `gatsby-plugin-less`,
     `gatsby-plugin-sass`,
+    `gatsby-plugin-stylus`,
     `gatsby-plugin-postcss`,
     {
       resolve: `gatsby-plugin-minify-classnames`,
@@ -65,7 +67,10 @@ module.exports = {
 
 ### dictionary
 
-Set a custom dictionary to create the minified classnames. The generated classnames will always start with letters, so the string must have at least one letter. The default value is `'bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ0123456789'`.
+Set a custom dictionary to create the minified classnames. The generated
+classnames will always start with letters, so the string must have at least one
+letter. The default value is
+`'bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ0123456789'`.
 
 ### enableOnDevelopment
 
