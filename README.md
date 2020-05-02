@@ -74,7 +74,7 @@ letter. The default value is
 
 ### enableOnDevelopment
 
-Minify classnames during development. The default value is `false`.
+Enable the plugin in development environments. The default value is `false`.
 
 ## License
 
