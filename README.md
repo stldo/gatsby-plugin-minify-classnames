@@ -67,14 +67,18 @@ module.exports = {
 
 ### dictionary
 
+Default: `'bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ0123456789'`. Type:
+`string`.
+
 Set a custom dictionary to create the minified classnames. The generated
-classnames will always start with letters, so the string must have at least one
-letter. The default value is
-`'bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ0123456789'`.
+classnames should always start with letters, so the string must have at least
+one letter.
 
 ### enableOnDevelopment
 
-Enable the plugin in development environments. The default value is `false`.
+Default: `false`. Type: `boolean`.
+
+Enable the plugin in development environments.
 
 ## License
 
