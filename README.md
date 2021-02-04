@@ -56,7 +56,7 @@ module.exports = {
       resolve: `gatsby-plugin-minify-classnames`,
       options: {
         dictionary: 'bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ0123456789',
-        enableOnDevelopment: false,
+        enable: true,
       },
     },
   ],
@@ -74,11 +74,12 @@ Set a custom dictionary to create the minified classnames. The generated
 classnames should always start with letters, so the string must have at least
 one letter.
 
-### enableOnDevelopment
+### enable
 
-Default: `false`. Type: `boolean`.
+Default: `process.env.NODE_ENV === 'production'`. Type: `boolean`.
 
-Enable the plugin in development environments.
+Condition to enable the plugin. Set it to `true` to always enable the plugin,
+even on development environment.
 
 ## License
 

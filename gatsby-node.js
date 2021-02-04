@@ -40,10 +40,10 @@ function getMinifiedIdentifier(
 }
 
 exports.onCreateWebpackConfig = (
-  { actions, getConfig, stage },
-  { dictionary, enableOnDevelopment = false }
+  { actions, getConfig },
+  { dictionary, enable = process.env.NODE_ENV === 'production' }
 ) => {
-  if (!enableOnDevelopment && stage.startsWith(`develop`)) {
+  if (!enable) {
     return
   } else if (dictionary && !HAS_A_LETTER.test(dictionary)) {
     throw new Error(`'dictionary' must have at least one letter`)
