@@ -66,8 +66,8 @@ exports.onCreateWebpackConfig = (
     for (let { use } of oneOf) {
       if (!use) continue
       for (let { options } of use) {
-        if (!options || !options.localIdentName) continue
-        options.getLocalIdent = (context, _, localName) => {
+        if (!options.modules || !options.modules.localIdentName) continue
+        options.modules.getLocalIdent = (context, _, localName) => {
           const path = context.resourcePath
           return getMinifiedIdentifier({ path, localName }, dictionary)
         }
