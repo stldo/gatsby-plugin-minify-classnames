@@ -78,8 +78,8 @@ one letter.
 
 Default: `process.env.NODE_ENV === 'production'`. Type: `boolean`.
 
-Condition to enable the plugin. Set it to `true` to always enable the plugin,
-even on development environment.
+Set it to `true` to enable the plugin, `false` to disable. By default, it'll be
+enabled on production environments.
 
 ## License
 
