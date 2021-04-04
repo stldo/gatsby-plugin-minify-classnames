@@ -41,13 +41,9 @@ function getMinifiedIdentifier(
 
 exports.onCreateWebpackConfig = (
   { actions, getConfig },
-  { dictionary, enable = process.env.NODE_ENV === 'production', ...options }
+  { dictionary, enable = process.env.NODE_ENV === 'production' }
 ) => {
-  if ('enableOnDevelopment' in options) { // TODO Remove on 0.3.0
-    throw new Error(
-      '"enableOnDevelopment" option is deprecated, use "enable" instead.'
-    )
-  } else if (!enable) {
+  if (!enable) {
     return
   } else if (dictionary && !HAS_A_LETTER.test(dictionary)) {
     throw new Error('"dictionary" option must have at least one letter.')
