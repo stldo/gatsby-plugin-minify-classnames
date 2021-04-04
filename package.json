@@ -1,7 +1,7 @@
 {
   "name": "gatsby-plugin-minify-classnames",
   "description": "Minify CSS Modules classnames",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "author": "stldo (https://github.com/stldo)",
   "license": "MIT",
   "repository": "https://github.com/stldo/gatsby-plugin-minify-classnames",
