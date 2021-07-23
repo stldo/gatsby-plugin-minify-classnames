@@ -4,6 +4,14 @@ Minify CSS Modules classnames. This plugin is tested with official CSS plugins â
 `gatsby-plugin-less`, `gatsby-plugin-sass`, `gatsby-plugin-stylus` and
 `gatsby-plugin-postcss`.
 
+It maps each fragment, reusing them and reducing overall ident length. E.g.: in
+`index-module--container`, `index-module` will be mapped to `b` and `container`
+to `b`, returning the minified classname `b_b`. In `index-module--footer`,
+`footer` will be mapped to `c`, returning `b_c`. `menu-module--container`, in
+turn, will return `c_b`, while `menu-module--footer` returns `c_c`. To avoid
+issues with specific classnames and ad blocking software, the default dictionary
+uses only consonants and numbers.
+
 ```css
 /* Without gatsby-plugin-minify-classnames */
 
