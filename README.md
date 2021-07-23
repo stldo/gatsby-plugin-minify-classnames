@@ -1,7 +1,8 @@
 # gatsby-plugin-minify-classnames
 
-Minify classnames created with CSS Modules. This plugin is compatible with
-official Gatsby Less, Sass, Stylus and PostCSS plugins.
+Minify CSS Modules classnames. This plugin is tested with official CSS plugins —
+`gatsby-plugin-less`, `gatsby-plugin-sass`, `gatsby-plugin-stylus` and
+`gatsby-plugin-postcss`.
 
 ```css
 /* Without gatsby-plugin-minify-classnames */
@@ -57,6 +58,8 @@ module.exports = {
       options: {
         dictionary: 'bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ0123456789',
         enable: process.env.NODE_ENV === 'production',
+        prefix: '',
+        sufix: ''
       },
     },
   ],
@@ -80,6 +83,14 @@ Default: `process.env.NODE_ENV === 'production'`. Type: `boolean`.
 
 Set it to `true` to enable the plugin, `false` to disable. By default, it'll be
 enabled on production environments.
+
+### prefix
+
+Default: `''`. Type: `string`.
+
+### suffix
+
+Default: `''`. Type: `string`.
 
 ## License
 

@@ -1,47 +1,49 @@
 const incstr = require('incstr')
 
-const FIRST_CHAR_IS_LETTER = /^[A-Za-z]/
 const HAS_A_LETTER = /[A-Za-z]/
-const IDENTIFIER_MAP = new Map()
+const IDENT_MAP = new Map()
+const IS_PRODUCTION = process.env.NODE_ENV === 'production'
+const STARTS_WITH_LETTER = /^[A-Za-z]/
 
-function getMinifiedIdentifier(
+function minifyIdent(
   fragments,
   dictionary = 'bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ0123456789'
 ) {
-  let minifiedIdentifier = ''
-  let index = 0
+  let minifiedIdent = ''
+  let isFirstFragment = true
 
-  for (let fragment in fragments) {
-    let fragmentMap = IDENTIFIER_MAP.get(fragment)
+  for (let fragmentName in fragments) {
+    const fragment = fragments[fragmentName]
+
+    let fragmentMap = IDENT_MAP.get(fragmentName)
 
     if (!fragmentMap) {
       fragmentMap = new Map()
-      fragmentMap.getMinifiedIdentifierFragment = incstr.idGenerator({
+      fragmentMap.getMinifiedFragment = incstr.idGenerator({
         alphabet: dictionary
       })
-      IDENTIFIER_MAP.set(fragment, fragmentMap)
+      IDENT_MAP.set(fragmentName, fragmentMap)
     }
 
-    const identifierFragment = fragments[fragment]
-    let minifiedIdentifierFragment = fragmentMap.get(identifierFragment)
+    let minifiedFragment = fragmentMap.get(fragment)
 
-    if (!minifiedIdentifierFragment) {
+    if (!minifiedFragment) {
       do {
-        minifiedIdentifierFragment = fragmentMap.getMinifiedIdentifierFragment()
-      } while (!index && !FIRST_CHAR_IS_LETTER.test(minifiedIdentifierFragment))
-      fragmentMap.set(identifierFragment, minifiedIdentifierFragment)
+        minifiedFragment = fragmentMap.getMinifiedFragment()
+      } while (isFirstFragment && !STARTS_WITH_LETTER.test(minifiedFragment))
+      fragmentMap.set(fragment, minifiedFragment)
     }
 
-    minifiedIdentifier += `_${minifiedIdentifierFragment}`
-    index++
+    minifiedIdent += `_${minifiedFragment}`
+    isFirstFragment = false
   }
 
-  return minifiedIdentifier.slice(1)
+  return minifiedIdent.slice(1) // slice(1) removes the first underscore
 }
 
 exports.onCreateWebpackConfig = (
   { actions, getConfig },
-  { dictionary, enable = process.env.NODE_ENV === 'production' }
+  { dictionary, enable = IS_PRODUCTION, prefix = '', suffix = '' }
 ) => {
   if (!enable) {
     return
@@ -65,7 +67,8 @@ exports.onCreateWebpackConfig = (
         if (!options.modules || !options.modules.localIdentName) continue
         options.modules.getLocalIdent = (context, _, localName) => {
           const path = context.resourcePath
-          return getMinifiedIdentifier({ path, localName }, dictionary)
+          const minifiedIdent = minifyIdent({ path, localName }, dictionary)
+          return `${prefix}${minifiedIdent}${suffix}`
         }
       }
     }
