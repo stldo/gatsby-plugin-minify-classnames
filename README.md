@@ -64,6 +64,7 @@ module.exports = {
     {
       resolve: `gatsby-plugin-minify-classnames`,
       options: {
+        // The options below are the plugin defaults
         dictionary: 'bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ0123456789',
         enable: process.env.NODE_ENV === 'production',
         prefix: '',
