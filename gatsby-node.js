@@ -47,7 +47,7 @@ exports.onCreateWebpackConfig = ({ actions, getConfig }, {
   if (!enable) {
     return
   } else if (!LETTER.test(dictionary)) {
-    throw new Error('"dictionary" option must have at least one letter.')
+    throw new Error('"dictionary" option must have at least one letter')
   }
 
   const config = getConfig()
