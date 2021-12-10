@@ -17,12 +17,12 @@
     "classnames",
     "class"
   ],
-  "dependencies": {
-    "incstr": "^1.2.3"
-  },
   "scripts": {
     "lint": "eslint --cache --ext js ./",
     "postversion": "git push && git push --tags"
+  },
+  "dependencies": {
+    "incstr": "^1.2.3"
   },
   "devDependencies": {
     "eslint": "^7.32.0",
@@ -30,5 +30,8 @@
     "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.2.0"
+  },
+  "peerDependencies": {
+    "gatsby": "^4.0.0"
   }
 }
