@@ -5,7 +5,7 @@ const LETTER = /[A-Za-z]/
 
 const minifiedParts = new Map()
 
-function minifyIdent(identParts, dictionary) {
+function minifyIdent (identParts, dictionary) {
   let ident = ''
   let isFirst = true
 
@@ -25,6 +25,7 @@ function minifyIdent(identParts, dictionary) {
     if (!minifiedIdent) {
       do {
         minifiedIdent = minifiedIdents.nextId()
+        // eslint-disable-next-line no-unmodified-loop-condition
       } while (isFirst && !LETTER.test(minifiedIdent[0]))
 
       minifiedIdents.set(sourceIdent, minifiedIdent)
@@ -73,7 +74,7 @@ exports.onCreateWebpackConfig = ({ actions, getConfig }, {
 
         const { localIdentName: _, ...modules } = options.modules
 
-        modules.getLocalIdent = (context, _, localName) =>{
+        modules.getLocalIdent = (context, _, localName) => {
           const identParts = { path: context.resourcePath, localName }
           const minifiedIdent = minifyIdent(identParts, dictionary)
 
