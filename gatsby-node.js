@@ -1,75 +1,86 @@
 const incstr = require('incstr')
 
-const HAS_A_LETTER = /[A-Za-z]/
-const IDENT_MAP = new Map()
 const IS_PRODUCTION = process.env.NODE_ENV === 'production'
-const STARTS_WITH_LETTER = /^[A-Za-z]/
+const LETTER = /[A-Za-z]/
 
-function minifyIdent(
-  fragments,
-  dictionary = 'bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ0123456789'
-) {
-  let minifiedIdent = ''
-  let isFirstFragment = true
+const minifiedParts = new Map()
 
-  for (let fragmentName in fragments) {
-    const fragment = fragments[fragmentName]
+function minifyIdent(identParts, dictionary) {
+  let ident = ''
+  let isFirst = true
 
-    let fragmentMap = IDENT_MAP.get(fragmentName)
+  for (const identPart in identParts) {
+    let minifiedIdents = minifiedParts.get(identPart)
 
-    if (!fragmentMap) {
-      fragmentMap = new Map()
-      fragmentMap.getMinifiedFragment = incstr.idGenerator({
-        alphabet: dictionary
-      })
-      IDENT_MAP.set(fragmentName, fragmentMap)
+    if (!minifiedIdents) {
+      minifiedIdents = new Map()
+      minifiedIdents.nextId = incstr.idGenerator({ alphabet: dictionary })
+      minifiedParts.set(identPart, minifiedIdents)
     }
 
-    let minifiedFragment = fragmentMap.get(fragment)
+    const sourceIdent = identParts[identPart]
 
-    if (!minifiedFragment) {
+    let minifiedIdent = minifiedIdents.get(sourceIdent)
+
+    if (!minifiedIdent) {
       do {
-        minifiedFragment = fragmentMap.getMinifiedFragment()
-      } while (isFirstFragment && !STARTS_WITH_LETTER.test(minifiedFragment))
-      fragmentMap.set(fragment, minifiedFragment)
+        minifiedIdent = minifiedIdents.nextId()
+      } while (isFirst && !LETTER.test(minifiedIdent[0]))
+
+      minifiedIdents.set(sourceIdent, minifiedIdent)
     }
 
-    minifiedIdent += `_${minifiedFragment}`
-    isFirstFragment = false
+    ident += `_${minifiedIdent}`
+    isFirst = false
   }
 
-  return minifiedIdent.slice(1) // slice(1) removes the first underscore
+  return ident.slice(1) // Ignore the first underscore
 }
 
-exports.onCreateWebpackConfig = (
-  { actions, getConfig },
-  { dictionary, enable = IS_PRODUCTION, prefix = '', suffix = '' }
-) => {
+exports.onCreateWebpackConfig = ({ actions, getConfig }, {
+  dictionary = 'bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ0123456789',
+  enable = IS_PRODUCTION,
+  prefix = '',
+  suffix = ''
+}) => {
   if (!enable) {
     return
-  } else if (dictionary && !HAS_A_LETTER.test(dictionary)) {
+  } else if (!LETTER.test(dictionary)) {
     throw new Error('"dictionary" option must have at least one letter.')
   }
 
   const config = getConfig()
-  const rules = config.module.rules.filter(({ oneOf }) =>
-    oneOf &&
-    Array.isArray(oneOf) &&
-    oneOf.every(({ test }) =>
-      '.css'.search(test) || '.sass'.search(test) || '.less'.search(test)
-    )
-  )
 
-  for (let { oneOf } of rules) {
-    for (let { use } of oneOf) {
-      if (!use) continue
-      for (let { options } of use) {
-        if (!options.modules || !options.modules.localIdentName) continue
-        options.modules.getLocalIdent = (context, _, localName) => {
-          const path = context.resourcePath
-          const minifiedIdent = minifyIdent({ path, localName }, dictionary)
+  for (const { oneOf } of config.module.rules) {
+    if (!oneOf || !oneOf.length) {
+      continue
+    }
+
+    for (const { use, test } of oneOf) {
+      if (
+        !test.test('.module.css') &&
+        !test.test('.module.less') &&
+        !test.test('.module.sass') &&
+        !test.test('.module.styl')
+      ) {
+        continue
+      }
+
+      for (const { loader, options = {} } of use) {
+        if (!loader.includes('/css-loader/') || !options.modules) {
+          continue
+        }
+
+        const { localIdentName: _, ...modules } = options.modules
+
+        modules.getLocalIdent = (context, _, localName) =>{
+          const identParts = { path: context.resourcePath, localName }
+          const minifiedIdent = minifyIdent(identParts, dictionary)
+
           return `${prefix}${minifiedIdent}${suffix}`
         }
+
+        options.modules = modules
       }
     }
   }
