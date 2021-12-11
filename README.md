@@ -16,11 +16,11 @@ $ npm install gatsby-plugin-minify-classnames
 ```js
 module.exports = {
   plugins: [
-    `gatsby-plugin-less`,
-    `gatsby-plugin-sass`,
-    `gatsby-plugin-stylus`,
+    'gatsby-plugin-less',
+    'gatsby-plugin-sass',
+    'gatsby-plugin-stylus',
     {
-      resolve: `gatsby-plugin-minify-classnames`,
+      resolve: 'gatsby-plugin-minify-classnames',
       // options: {
       //   // The options below are the plugin defaults
       //   dictionary: 'bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ0123456789',
@@ -124,4 +124,6 @@ and ad blockers, the default dictionary uses only consonants and numbers.
 
 ## License
 
-[The MIT License](./LICENSE)
+[The MIT License][license]
+
+[license]: ./LICENSE
