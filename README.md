@@ -20,7 +20,7 @@ module.exports = {
     'gatsby-plugin-sass',
     'gatsby-plugin-stylus',
     {
-      resolve: 'gatsby-plugin-minify-classnames',
+      resolve: 'gatsby-plugin-minify-classnames'
       // options: {
       //   // The options below are the plugin defaults
       //   dictionary: 'bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ0123456789',
