@@ -1,19 +1,21 @@
-# gatsby-plugin-minify-classnames
+# gatsby-plugin-minify-classnames [![npm][1]][2]
 
-Minify CSS Modules class names. This plugin is tested with official CSS plugins —
-`gatsby-plugin-less`, `gatsby-plugin-sass` and `gatsby-plugin-stylus`.
+Minify CSS Modules class names. This plugin is tested with official CSS plugins
+— `gatsby-plugin-less`, `gatsby-plugin-sass` and `gatsby-plugin-stylus`.
 
-## Install
+## Installation
 
 ```sh
-$ npm install gatsby-plugin-minify-classnames
+npm install gatsby-plugin-minify-classnames
 ```
 
-## Configure
+## Usage
 
-> Add this plugin after Less/Sass/Stylus plugins in `gatsby-config.js`.
+> Note: add this plugin after Less/Sass/Stylus plugins.
 
 ```js
+/* gatsby-config.js */
+
 module.exports = {
   plugins: [
     'gatsby-plugin-less',
@@ -21,17 +23,15 @@ module.exports = {
     'gatsby-plugin-stylus',
     {
       resolve: 'gatsby-plugin-minify-classnames'
-      // options: {
-      //   // The options below are the plugin defaults
-      //   dictionary: 'bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ0123456789',
-      //   enable: process.env.NODE_ENV === 'production',
-      //   prefix: '',
-      //   sufix: ''
-      // }
+      options: {
+        /* gatsby-plugin-minify-classnames options here */
+      }
     }
   ]
 }
 ```
+
+## Options
 
 ### dictionary
 
@@ -39,7 +39,9 @@ Type: `string`.
 Default: `'bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ0123456789'`.
 
 Characters used to generate the minified class names. Class names should start
-with letters, so the string must have at least one letter.
+with letters, so the string must have at least one letter. To avoid issues with
+specific class names and ad blockers — e.g. `ad` —, the default dictionary uses
+only consonants and numbers.
 
 ### enable
 
@@ -59,12 +61,11 @@ Type: `string`. Default: `''`.
 ## How it works
 
 It shortens the class name length by mapping the `resourcePath` and the
-`localName` to incremental strings. To avoid issues between specific class names
-and ad blockers, the default dictionary uses only consonants and numbers.
+`localName` to incremental strings.
 
 ### Example
 
-— The files `index.module.css` and `menu.module.css`, respectively:
+The files `index.module.css` and `menu.module.css`, respectively:
 
 ```css
 .container {
@@ -82,7 +83,7 @@ and ad blockers, the default dictionary uses only consonants and numbers.
 }
 ```
 
-— Generate the following CSS with `gatsby-plugin-minify-classnames`:
+Generate the following CSS with `gatsby-plugin-minify-classnames`:
 
 ```css
 /* index.module.css */
@@ -102,7 +103,8 @@ and ad blockers, the default dictionary uses only consonants and numbers.
 }
 ```
 
-— Without `gatsby-plugin-minify-classnames`:
+With `gatsby-plugin-minify-classnames` disabled, the following CSS would be
+generated:
 
 ```css
 /* index.module.css */
@@ -126,4 +128,6 @@ and ad blockers, the default dictionary uses only consonants and numbers.
 
 [The MIT License][license]
 
+[1]: https://img.shields.io/npm/v/gatsby-plugin-minify-classnames
+[2]: https://www.npmjs.com/package/gatsby-plugin-minify-classnames
 [license]: ./LICENSE
