@@ -22,7 +22,7 @@ module.exports = {
     'gatsby-plugin-sass',
     'gatsby-plugin-stylus',
     {
-      resolve: 'gatsby-plugin-minify-classnames'
+      resolve: 'gatsby-plugin-minify-classnames',
       options: {
         /* gatsby-plugin-minify-classnames options here */
       }
