@@ -1,3 +1,5 @@
+const { sep } = require('path')
+
 const getMinifiedIdent = require('./lib/get-minified-ident')
 
 const LETTER = /[A-Za-z]/
@@ -27,7 +29,7 @@ exports.onCreateWebpackConfig = ({ actions, getConfig }, {
       }
 
       for (const { loader, options } of use) {
-        if (!loader?.includes('/css-loader/') || !options?.modules) {
+        if (!loader?.includes(`${sep}css-loader${sep}`) || !options?.modules) {
           continue
         }
 
