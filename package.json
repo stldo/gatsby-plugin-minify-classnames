@@ -3,11 +3,6 @@
   "version": "4.1.3",
   "description": "Minify CSS Modules class names",
   "repository": "https://github.com/stldo/gatsby-plugin-minify-classnames",
-  "engines": {
-    "yarn": "^1.17.3",
-    "node": ">=18.0.0",
-    "npm": ">=8.0.0"
-  },
   "keywords": [
     "gatsby",
     "gatsby-plugin",
@@ -28,11 +23,11 @@
     "incstr": "^1.2.3"
   },
   "devDependencies": {
-    "eslint": "^8.29.0",
-    "eslint-config-standard": "^17.0.0-0",
-    "eslint-plugin-import": "^2.26",
+    "eslint": "^8.35.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^6.0.0"
+    "eslint-plugin-promise": "^6.1.1"
   },
   "peerDependencies": {
     "gatsby": "^5.0.0"
